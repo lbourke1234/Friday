@@ -9,10 +9,12 @@ class AddComment extends Component {
     state = {
         review: {
             comment: '',
-            rate: '',
-            elementId: this.props.asin
+            rate: '1',
+            elementId:''
         }
     }
+
+    
 
 
         
@@ -21,24 +23,25 @@ class AddComment extends Component {
     fetchData = async () => {
         try {
 
-            const response = await fetch(`https://striveschool-api.herokuapp.com/api/comments/${this.props.asin}`, {
+            const response = await fetch(`https://striveschool-api.herokuapp.com/api/comments/`, {
                 method: 'POST',
-                body: JSON.stringify(this.state.review),
+                body: JSON.stringify({...this.state.review, elementId:this.props.asin}),
                 headers: {
                     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjU2YmQxZGE5MDIzOTAwMTVkOTY1YzgiLCJpYXQiOjE2NTA2MzM2MDQsImV4cCI6MTY1MTg0MzIwNH0.f_pAW-6v_gZNed-ErZFdbjco3Bd-YIoERJJcFpj_7Q8',
                     "Content-type": "application/json"
                 }
             })
-            const body = await response.json()
-            this.setState({
-                commentsArray: body
-            })
-            alert('Added review successfully')
-            // console.log(this.state.commentsArray)
+            if (response.ok){
+                alert('Added review successfully')
+                // console.log(this.state.commentsArray)
+
+            } else {
+                console.log("error", response)
+            }
 
             
         } catch (error) {
-            console.log(error, "error")
+            console.log("error", error)
         }
     }
 
